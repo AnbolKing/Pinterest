@@ -11,7 +11,12 @@ class Content extends Component {
 
   componentDidMount() {
     this.props.getPic(); 
+    // window.addEventListener('resize', this.props.handleResize()); 
   }
+
+  // componentWillUnmount() { 
+  //   window.removeEventListener('resize', this.props.handleResize());
+  // }
 
   render() {
     return (
@@ -22,7 +27,7 @@ class Content extends Component {
               this.props.data.map((item,index) => {
                 if(item.url) {
                   return (
-                    <div className="eachPic" key={index} style={{paddingBottom:item.height,left:item.left+'px',top:item.top+'px'}}>
+                    <div className="eachPic" key={index} style={{height:item.height,left:item.left+'px',top:item.top+'px'}}>
                       <img src={item.url} alt={index} key={index}/>
                     </div>
                   );
@@ -45,8 +50,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    async getPic() {
-    //  var timer = 0;
+    async getPic() {  
       var picData = [
         {
           id:0,
@@ -57,7 +61,7 @@ const mapDispatch = (dispatch) => {
           left:1000,
         }
       ];
-      for(var j=1;j<=10;j++) {
+      for(var j=1;j<=30;j++) {
         console.log(1);
         try {
           console.log(2);
@@ -66,7 +70,7 @@ const mapDispatch = (dispatch) => {
           var pic = {
             id:result[0].id,
             url:result[0].url,
-            height:result[0].height,
+            height:(200*result[0].width)/result[0].height,
             width:result[0].width,
             top:0,
             left:0,
@@ -78,48 +82,9 @@ const mapDispatch = (dispatch) => {
           console.log("error"+err);
         }
       }
-      // var loop = setInterval(async () => {
-      //   console.log(1);
-      //   timer = timer + 1;
-      //   if(timer === 20) {
-      //     clearInterval(loop);
-      //   }
-      //   try {
-      //     console.log(2);
-      //     let res = await axios.get('https://api.thecatapi.com/v1/images/search?size=full');
-      //     let result = res.data;
-      //     var pic = {
-      //       id:result[0].id,
-      //       url:result[0].url,
-      //       height:result[0].height,
-      //       width:result[0].width,
-      //       top:0,
-      //       left:0,
-      //     }
-      //     picData.push(pic);
-      //     console.log(3);
-      //   }
-      //   catch(err) {
-      //     console.log("error"+err);
-      //   }
-      //   console.log(3);
-        // axios.get('https://api.thecatapi.com/v1/images/search?size=full').then((res) => {
-        //   const result = res.data;
-        //   var pic = {
-        //     id:result[0].id,
-        //     url:result[0].url,
-        //     height:result[0].height,
-        //     width:result[0].width,
-        //     top:0,
-        //     left:0,
-        //   }
-        //   picData.push(pic);
-        // }).catch(e => {
-        //   console.log("error: "+e);
-        // })
-      // },10)
+      var screenWidth = document.querySelector('body').offsetWidth;
       var nodeWidth = 200;
-      var colNum = 7;
+      var colNum = screenWidth/nodeWidth;
       var colSumHeight = [];
       for(var i=0;i<colNum;i++) {
         colSumHeight.push(0);
